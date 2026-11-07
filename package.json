@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && node prisma/pre-push.mjs && prisma db push --skip-generate && node prisma/ensure-admin.mjs && node prisma/seed-demo.mjs && next build",
+    "build": "node prisma/build.mjs",
     "start": "next start",
     "postinstall": "prisma generate"
   },
