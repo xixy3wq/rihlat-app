@@ -24,12 +24,12 @@ export function SiteHeader({ s }: { s: PublicSettings }) {
           <Link href="/#trips">الرحلات</Link>
           <Link href="/#about">من نحن</Link>
           <Link href="/#contact">تواصل</Link>
-          <Link href="/#my-booking">حجزي</Link>
+          <Link href="/account">حسابي</Link>
         </nav>
         <div className="icons">
           <Link href="/#trips" className="ibtn" aria-label="بحث">{Ic.search(19)}</Link>
-          <Link href="/#my-booking" className="ibtn" aria-label="حجزي">{Ic.ticket(19)}</Link>
-          <HeaderMenu links={[["/#trips", "الرحلات"], ["/#how", "كيف تحجز؟"], ["/#about", "من نحن"], ["/#contact", "تواصل معنا"], ["/#my-booking", "استعراض حجزي"], ["/terms", "الشروط والأحكام"], ["/refund-policy", "سياسة الإلغاء"]]} />
+          <Link href="/account" className="ibtn" aria-label="حسابي">{Ic.user(20)}</Link>
+          <HeaderMenu links={[["/#trips", "الرحلات"], ["/#how", "كيف تحجز؟"], ["/#about", "من نحن"], ["/#contact", "تواصل معنا"], ["/account", "حسابي / تسجيل الدخول"], ["/#my-booking", "استعراض حجز برقمه"], ["/terms", "الشروط والأحكام"], ["/refund-policy", "سياسة الإلغاء"]]} />
         </div>
       </div>
     </header>

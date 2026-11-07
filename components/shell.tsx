@@ -39,7 +39,7 @@ export function BottomNav() {
   const items: [string, string, React.ReactNode, boolean][] = [
     ["/", "الرئيسية", Ic.home(22), p === "/" && !hash],
     ["/#trips", "الرحلات", Ic.map(22), p === "/" && hash === "#trips" || p.startsWith("/trips")],
-    ["/#my-booking", "حجزي", Ic.ticket(22), hash === "#my-booking" || p.startsWith("/booking") || p === "/my-booking"],
+    ["/account", "حسابي", Ic.user(22), p.startsWith("/account") || p.startsWith("/booking")],
   ];
   return <nav className="bottom-nav">{items.map(([h, l, ic, on]) => <Link key={h} href={h} className={on ? "on" : ""}>{ic}<span>{l}</span></Link>)}</nav>;
 }

@@ -136,6 +136,12 @@ export async function POST(req: Request) {
       case "booking.message": { const m = await bookingMessage(b.id, b.which === "remind" ? "tplRemind" : b.which === "cancel" ? "tplCancel" : "tplConfirm"); if (!m) fail("غير موجود"); return { text: m!.text, phone: m!.b.customer.phone }; }
 
       /* ---------- العملاء ---------- */
+      case "customer.setPassword": {
+        needAdmin();
+        const pw = String(b.password || ""); if (pw.length < 6) fail("كلمة المرور 6 أحرف على الأقل");
+        await prisma.customer.update({ where: { id: b.id }, data: { passwordHash: await bcrypt.hash(pw, 10) } });
+        await audit(me.id, op, b.id); return { ok: true };
+      }
       case "customer.save": {
         const data = { name: str(b.name, 80), email: str(b.email, 120) || null, city: str(b.city, 60) || null, note: str(b.note, 500) || null };
         if (!data.name) fail("اكتب الاسم");

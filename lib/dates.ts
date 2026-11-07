@@ -9,6 +9,7 @@ const F = {
   dm: f({ day: "numeric", month: "long" }),
   time: f({ hour: "numeric", minute: "2-digit" }),
   dt: f({ weekday: "long", day: "numeric", month: "long", hour: "numeric", minute: "2-digit" }),
+  wdm: f({ weekday: "long", day: "numeric", month: "long" }),
   hijri: new Intl.DateTimeFormat("ar-SA-u-ca-islamic-umalqura-nu-latn", { timeZone: TZ, day: "numeric", month: "long", year: "numeric" }),
   iso: new Intl.DateTimeFormat("en-CA", { timeZone: TZ, year: "numeric", month: "2-digit", day: "2-digit" }),
   isoT: new Intl.DateTimeFormat("en-GB", { timeZone: TZ, hour: "2-digit", minute: "2-digit", hour12: false }),
@@ -21,8 +22,10 @@ export const fmtFull = (d: Date | string) => F.full.format(D(d));
 export const fmtDate = (d: Date | string) => F.date.format(D(d));
 export const fmtShort = (d: Date | string) => F.short.format(D(d));
 export const fmtDM = (d: Date | string) => F.dm.format(D(d));
-export const fmtTime = (d: Date | string) => F.time.format(D(d)).replace("ص", "صباحًا").replace("م", "مساءً");
-export const fmtDT = (d: Date | string) => `${F.dt.format(D(d))}`.replace("ص", "صباحًا").replace("م", "مساءً");
+/** الوقت مع «صباحًا/مساءً» بدل الحرف المختصر في آخره فقط */
+export const fmtTime = (d: Date | string) => F.time.format(D(d)).replace(/\s?ص$/, " صباحًا").replace(/\s?م$/, " مساءً");
+/** اليوم والتاريخ ثم الوقت: «الأربعاء، 11 نوفمبر · 3:00 مساءً» */
+export const fmtDT = (d: Date | string) => `${F.wdm.format(D(d))} · ${fmtTime(d)}`;
 export const fmtHijri = (d: Date | string) => F.hijri.format(D(d));
 export const fmtWeekday = (d: Date | string) => F.weekday.format(D(d));
 export const fmtDay = (d: Date | string) => F.day.format(D(d));

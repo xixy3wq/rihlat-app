@@ -34,6 +34,7 @@ export const Ic = {
   qr: (s?: number) => <I size={s} d={<><rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="3" y="14" width="7" height="7" /><path d="M14 14h3v3h-3zM20 14v3M17 20h4M14 20h1" /></>} />,
   list: (s?: number) => <I size={s} d={<><path d="M8 6h13M8 12h13M8 18h13" /><circle cx="4" cy="6" r="1" /><circle cx="4" cy="12" r="1" /><circle cx="4" cy="18" r="1" /></>} />,
   bus: (s?: number) => <I size={s} d={<><rect x="4" y="4" width="16" height="13" rx="3" /><path d="M4 11h16M7 21v-4M17 21v-4" /><circle cx="8" cy="14" r="1" /><circle cx="16" cy="14" r="1" /></>} />,
+  user: (s?: number) => <I size={s} d={<><circle cx="12" cy="8" r="4" /><path d="M4 21a8 8 0 0 1 16 0" /></>} />,
   heart: (s?: number) => <I size={s} d={<path d="M12 21s-7.5-4.6-9.5-9.3A5.2 5.2 0 0 1 12 6.6a5.2 5.2 0 0 1 9.5 5.1C19.5 16.4 12 21 12 21z" />} />,
 };
 export const Stars = ({ n }: { n: number }) => <span className="stars" aria-label={`${n} من 5`}>{"★".repeat(Math.round(n))}{"☆".repeat(5 - Math.round(n))}</span>;

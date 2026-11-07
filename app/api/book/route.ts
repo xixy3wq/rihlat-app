@@ -1,13 +1,16 @@
 import { handle, fail, int, str, cleanPhone, isSaudiPhone } from "@/lib/auth";
 import { createBooking } from "@/lib/booking";
+import { currentCustomer } from "@/lib/customer";
 export const dynamic = "force-dynamic";
 
 /** إنشاء حجز من الموقع: يحجز المقاعد مؤقتًا ويعيد رقم الحجز للانتقال لصفحة الدفع */
 export async function POST(req: Request) {
   return handle(async () => {
     const b = await req.json().catch(() => ({}));
-    const name = str(b.name, 80);
-    const phone = cleanPhone(b.phone);
+    const me = await currentCustomer();
+    const name = str(b.name, 80) || me?.name || "";
+    // العميل المسجّل يحجز دائمًا برقم حسابه
+    const phone = me ? me.phone : cleanPhone(b.phone);
     if (name.length < 3) fail("يرجى كتابة الاسم الكامل");
     if (!isSaudiPhone(phone) && !(phone.length >= 10 && phone.length <= 15)) fail("رقم الجوال غير صحيح، مثال: 05xxxxxxxx");
     const email = str(b.email, 120);

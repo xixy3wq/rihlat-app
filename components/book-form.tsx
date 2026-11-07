@@ -13,6 +13,7 @@ type Props = {
   dep: { id: string; startAt: string; left: number; priceAdult: number | null; priceChild: number | null };
   init: { a: number; c: number };
   s: { vat: { enabled: boolean; rate: number; included: boolean }; methods: string[]; holdMinutes: number; brand: string };
+  me?: { name: string; phone: string; email: string; city: string } | null;
 };
 
 export async function api(url: string, body: any) {
@@ -22,7 +23,7 @@ export async function api(url: string, body: any) {
   return j;
 }
 
-export default function BookForm({ trip, dep, init, s }: Props) {
+export default function BookForm({ trip, dep, init, s, me }: Props) {
   const router = useRouter();
   const maxTotal = Math.min(trip.maxPerBooking, dep.left || 1);
   const [adults, setAdults] = useState(Math.min(init.a, maxTotal));
@@ -30,7 +31,7 @@ export default function BookForm({ trip, dep, init, s }: Props) {
   const [picks, setPicks] = useState<Record<string, number>>({});
   const [coupon, setCoupon] = useState("");
   const [couponIn, setCouponIn] = useState("");
-  const [f, setF] = useState({ name: "", phone: "", email: "", city: "", note: "", agree: false });
+  const [f, setF] = useState({ name: me?.name || "", phone: me?.phone || "", email: me?.email || "", city: me?.city || "", note: "", agree: false });
   const [q, setQ] = useState<any>(null);
   const [err, setErr] = useState("");
   const [busy, setBusy] = useState(false);
@@ -81,10 +82,10 @@ export default function BookForm({ trip, dep, init, s }: Props) {
           </section>
         )}
         <section className="card stack">
-          <h2>بياناتك</h2>
+          <div className="row between"><h2>بياناتك</h2>{me ? <span className="chip ok">مسجّل الدخول</span> : <Link href={`/account?next=${encodeURIComponent(`/book/${trip.slug}?dep=${dep.id}&a=${adults}&c=${children}`)}`} className="small">لديك حساب؟ سجّل الدخول</Link>}</div>
           <div className="grid-2">
             <div className="field"><label>الاسم الكامل *</label><input className="input" required value={f.name} onChange={(e) => setF({ ...f, name: e.target.value })} placeholder="الاسم الثلاثي" /></div>
-            <div className="field"><label>رقم الجوال (واتساب) *</label><input className="input" required inputMode="tel" dir="ltr" value={f.phone} onChange={(e) => setF({ ...f, phone: e.target.value })} placeholder="05xxxxxxxx" /></div>
+            <div className="field"><label>رقم الجوال (واتساب) *</label><input className="input" required inputMode="tel" dir="ltr" value={f.phone} onChange={(e) => setF({ ...f, phone: e.target.value })} placeholder="05xxxxxxxx" readOnly={!!me} /></div>
             <div className="field"><label>البريد الإلكتروني</label><input className="input" type="email" dir="ltr" value={f.email} onChange={(e) => setF({ ...f, email: e.target.value })} placeholder="اختياري" /></div>
             <div className="field"><label>المدينة</label><input className="input" value={f.city} onChange={(e) => setF({ ...f, city: e.target.value })} placeholder="اختياري" /></div>
           </div>
