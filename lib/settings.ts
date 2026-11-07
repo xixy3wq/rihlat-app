@@ -81,6 +81,7 @@ export function publicSettings(s: Settings) {
   const { payment, wa, ...rest } = s;
   return {
     ...rest,
+    logoUrl: rest.logoUrl || DEF.logoUrl,
     payment: { pk: payment.pk, methods: payment.methods, applePayLabel: payment.applePayLabel, allowTransfer: payment.allowTransfer, bankInfo: payment.bankInfo, live: payment.pk.startsWith("pk_live_"), ready: !!payment.pk && !!payment.sk },
   };
 }

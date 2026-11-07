@@ -208,7 +208,7 @@ html{scroll-behavior:smooth}
 .site-foot h4{color:var(--ink);margin-bottom:10px;font-size:1rem}
 .site-foot a{color:var(--ink);display:block;padding:3px 0}
 .site-foot .copy{border-top:1px solid var(--line);padding-block:14px calc(14px + env(safe-area-inset-bottom,0px));font-size:.8rem;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
-.wa-float{position:fixed;bottom:calc(18px + env(safe-area-inset-bottom,0px));inset-inline-end:16px;z-index:30;display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;background:#25d366;color:#fff;font-weight:700;font-size:.9rem;text-decoration:none!important;box-shadow:0 10px 24px -8px rgba(37,211,102,.7)}
+.wa-float{position:fixed;bottom:calc(18px + env(safe-area-inset-bottom,0px));inset-inline-start:16px;z-index:30;display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;background:#25d366;color:#fff;font-weight:700;font-size:.9rem;text-decoration:none!important;box-shadow:0 10px 24px -8px rgba(37,211,102,.7)}
 .empty{padding:40px 20px;text-align:center;color:var(--muted);display:grid;gap:8px;justify-items:center}
 .empty .big{font-size:2.4rem}
 
