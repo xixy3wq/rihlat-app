@@ -1,0 +1,11 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/daily",
+      "schedule": "0 14 * * *"
+    }
+  ],
+  "regions": [
+    "fra1"
+  ]
+}

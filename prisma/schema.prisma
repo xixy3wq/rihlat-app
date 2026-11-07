@@ -1,0 +1,245 @@
+// قاعدة بيانات منصة الرحلات — PostgreSQL (Neon) على Vercel
+// كل المبالغ بالهللات (عدد صحيح): 350 ريال = 35000
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DATABASE_URL_UNPOOLED")
+}
+
+/// موظفو المكتب: role = admin (مدير كامل) | staff (موظف: الحجوزات والتحضير فقط)
+model User {
+  id           String    @id @default(cuid())
+  role         String    @default("staff")
+  status       String    @default("active")
+  name         String
+  username     String    @unique
+  passwordHash String
+  createdAt    DateTime  @default(now())
+  lastSeenAt   DateTime?
+}
+
+/// الإعدادات العامة (العلامة، التواصل، الدفع، الضريبة…) — المفاتيح السرية لا تُرسل للمتصفح
+model Setting {
+  key       String   @id
+  value     Json
+  updatedAt DateTime @updatedAt
+}
+
+/// تصنيفات الرحلات (بر، بحر، جبال…)
+model Category {
+  id    String @id @default(cuid())
+  name  String
+  slug  String @unique
+  icon  String @default("🏕️")
+  order Int    @default(0)
+  trips Trip[]
+}
+
+/// الرحلة (المنتج): الوصف والبرنامج والأسعار، ولها مواعيد انطلاق متعددة
+model Trip {
+  id              String      @id @default(cuid())
+  slug            String      @unique
+  title           String
+  subtitle        String?
+  categoryId      String?
+  category        Category?   @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  /// مدينة الانطلاق والوجهة
+  city            String?
+  destination     String?
+  durationDays    Int         @default(1)
+  durationLabel   String?
+  startTime       String?
+  cover           String?
+  images          String[]    @default([])
+  summary         String?
+  description     String?
+  /// البرنامج: [{ title, items: [string] }]
+  itinerary       Json        @default("[]")
+  includes        String[]    @default([])
+  excludes        String[]    @default([])
+  meetingPoint    String?
+  meetingMapUrl   String?
+  priceAdult      Int
+  priceChild      Int?
+  childNote       String?
+  minAge          Int?
+  /// إضافات اختيارية: [{ id, name, price, perPerson }]
+  extras          Json        @default("[]")
+  capacityDefault Int         @default(20)
+  maxPerBooking   Int         @default(10)
+  /// draft | published | archived
+  status          String      @default("draft")
+  featured        Boolean     @default(false)
+  order           Int         @default(0)
+  /// أسئلة شائعة: [{ q, a }]
+  faq             Json        @default("[]")
+  policy          String?
+  views           Int         @default(0)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  departures      Departure[]
+  bookings        Booking[]
+  reviews         Review[]
+
+  @@index([status, featured, order])
+}
+
+/// موعد انطلاق لرحلة: تاريخ وسعة ومقاعد
+model Departure {
+  id         String    @id @default(cuid())
+  tripId     String
+  trip       Trip      @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  startAt    DateTime
+  endAt      DateTime?
+  capacity   Int
+  priceAdult Int?
+  priceChild Int?
+  /// open | closed | cancelled | done
+  status     String    @default("open")
+  note       String?
+  createdAt  DateTime  @default(now())
+  bookings   Booking[]
+
+  @@index([tripId, startAt])
+  @@index([startAt, status])
+}
+
+/// العميل (يُعرَّف برقم الجوال)
+model Customer {
+  id        String    @id @default(cuid())
+  name      String
+  phone     String    @unique
+  email     String?
+  city      String?
+  note      String?
+  createdAt DateTime  @default(now())
+  bookings  Booking[]
+}
+
+/// الحجز: pending (بانتظار الدفع، يحجز المقاعد حتى holdUntil) | paid | cancelled | refunded | expired
+model Booking {
+  id          String    @id @default(cuid())
+  code        String    @unique
+  tripId      String
+  trip        Trip      @relation(fields: [tripId], references: [id])
+  departureId String
+  departure   Departure @relation(fields: [departureId], references: [id])
+  customerId  String
+  customer    Customer  @relation(fields: [customerId], references: [id])
+  adults      Int
+  children    Int       @default(0)
+  /// الإضافات المختارة: [{ id, name, qty, price }]
+  extras      Json      @default("[]")
+  subtotal    Int
+  discount    Int       @default(0)
+  vat         Int       @default(0)
+  total       Int
+  couponId    String?
+  coupon      Coupon?   @relation(fields: [couponId], references: [id], onDelete: SetNull)
+  status      String    @default("pending")
+  /// creditcard | applepay | stcpay | samsungpay | cash | transfer | free
+  payMethod   String?
+  paidAt      DateTime?
+  holdUntil   DateTime?
+  note        String?
+  adminNote   String?
+  attended    Boolean   @default(false)
+  attendedAt  DateTime?
+  /// web | admin
+  source      String    @default("web")
+  /// نسخة من بيانات الرحلة والموعد وقت الحجز
+  snapshot    Json?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  payments    Payment[]
+  review      Review?
+
+  @@index([departureId, status])
+  @@index([customerId])
+  @@index([status, createdAt])
+}
+
+/// عملية دفع عند بوابة الدفع (ميسّر)
+model Payment {
+  id         String   @id @default(cuid())
+  bookingId  String
+  booking    Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  provider   String   @default("moyasar")
+  providerId String?  @unique
+  amount     Int
+  refunded   Int      @default(0)
+  /// initiated | paid | failed | refunded
+  status     String
+  method     String?
+  message    String?
+  raw        Json?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+/// أحداث الويبهوك المستلمة (لمنع التكرار)
+model PayEvent {
+  id        String   @id
+  type      String
+  createdAt DateTime @default(now())
+}
+
+/// كوبون خصم: type = percent | fixed
+model Coupon {
+  id        String    @id @default(cuid())
+  code      String    @unique
+  type      String
+  value     Int
+  minTotal  Int       @default(0)
+  maxUses   Int?
+  used      Int       @default(0)
+  tripId    String?
+  startsAt  DateTime?
+  endsAt    DateTime?
+  active    Boolean   @default(true)
+  createdAt DateTime  @default(now())
+  bookings  Booking[]
+}
+
+/// تقييم عميل لرحلة (يظهر بعد اعتماد الإدارة)
+model Review {
+  id        String   @id @default(cuid())
+  tripId    String
+  trip      Trip     @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  bookingId String?  @unique
+  booking   Booking? @relation(fields: [bookingId], references: [id], onDelete: SetNull)
+  name      String
+  rating    Int
+  text      String?
+  approved  Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([tripId, approved])
+}
+
+/// رسائل التواصل من الزوار
+model Message {
+  id        String   @id @default(cuid())
+  name      String
+  phone     String
+  text      String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+/// سجل العمليات الإدارية
+model Audit {
+  id        String   @id @default(cuid())
+  userId    String?
+  action    String
+  target    String?
+  detail    Json?
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+}

@@ -1,0 +1,30 @@
+{
+  "name": "rihlat-app",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "prisma generate && node prisma/pre-push.mjs && prisma db push --skip-generate && node prisma/ensure-admin.mjs && next build",
+    "start": "next start",
+    "postinstall": "prisma generate"
+  },
+  "dependencies": {
+    "@prisma/client": "^6",
+    "@vercel/blob": "^2",
+    "bcryptjs": "^2.4.3",
+    "jose": "^5.9.6",
+    "next": "14.2.35",
+    "qrcode": "^1.5.4",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/node": "^20.17.6",
+    "@types/qrcode": "^1.5.5",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "prisma": "^6",
+    "typescript": "^5.6.3"
+  }
+}
