@@ -83,6 +83,7 @@ export default function SettingsForm({ s: init, users, cats, meId, site, hasBlob
           <F label="قالب الإلغاء">{Ta("wa.tplCancel", 3)}</F>
         </>}
         {tab === 5 && <>
+          <F label="شريط الإعلان أعلى الموقع" hint="اتركه فارغًا لإخفائه">{In("home.announce")}</F>
           <F label="العنوان الرئيسي">{In("home.heroTitle")}</F>
           <F label="النص تحت العنوان">{Ta("home.heroText", 3)}</F>
           <h3>الأسئلة الشائعة</h3>

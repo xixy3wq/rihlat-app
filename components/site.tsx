@@ -4,6 +4,7 @@ import type { PublicSettings } from "@/lib/settings";
 import { waLink } from "@/lib/wa";
 import { fmtMoney } from "@/lib/money";
 import { fmtDay, fmtMon } from "@/lib/dates";
+import { HeaderMenu } from "./shell";
 
 export function Logo({ s }: { s: PublicSettings }) {
   return (
@@ -23,8 +24,13 @@ export function SiteHeader({ s }: { s: PublicSettings }) {
           <Link href="/#trips">الرحلات</Link>
           <Link href="/#about">من نحن</Link>
           <Link href="/#contact">تواصل</Link>
-          <Link href="/#my-booking" className="keep">حجزي</Link>
+          <Link href="/#my-booking">حجزي</Link>
         </nav>
+        <div className="icons">
+          <Link href="/#trips" className="ibtn" aria-label="بحث">{Ic.search(19)}</Link>
+          <Link href="/#my-booking" className="ibtn" aria-label="حجزي">{Ic.ticket(19)}</Link>
+          <HeaderMenu links={[["/#trips", "الرحلات"], ["/#how", "كيف تحجز؟"], ["/#about", "من نحن"], ["/#contact", "تواصل معنا"], ["/#my-booking", "استعراض حجزي"], ["/terms", "الشروط والأحكام"], ["/refund-policy", "سياسة الإلغاء"]]} />
+        </div>
       </div>
     </header>
   );
@@ -63,7 +69,7 @@ export function SiteFooter({ s }: { s: PublicSettings }) {
         </div>
       </div>
       <div className="wrap copy"><span>© {y} {s.brand}. جميع الحقوق محفوظة.</span><span>الدفع آمن عبر بوابة دفع معتمدة</span></div>
-      {s.whatsapp && <a className="wa-float no-print" href={waLink(s.whatsapp, `السلام عليكم، أرغب بالاستفسار عن الرحلات`)} target="_blank" rel="noopener" aria-label="تواصل عبر واتساب">{Ic.wa(28)}</a>}
+      {s.whatsapp && <a className="wa-float no-print" href={waLink(s.whatsapp, `السلام عليكم، أرغب بالاستفسار عن الرحلات`)} target="_blank" rel="noopener" aria-label="تواصل عبر واتساب">{Ic.wa(22)} تواصل معنا</a>}
     </footer>
   );
 }
@@ -100,7 +106,7 @@ export function TripCard({ t, seats }: { t: any; seats?: Record<string, number> 
         )}
         <div className="foot">
           <div className="price"><span className="from">يبدأ من</span><b>{fmtMoney(from)}</b><small>للشخص</small></div>
-          <span className="btn sm navy">التفاصيل</span>
+          <span className="btn sm navy go"><span className="lbl-txt">التفاصيل</span>{Ic.ticket(16)}</span>
         </div>
       </div>
     </Link>
