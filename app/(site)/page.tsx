@@ -2,7 +2,6 @@ import Link from "next/link";
 import { prisma } from "@/lib/db";
 import { getSettings, publicSettings } from "@/lib/settings";
 import { publishedTrips } from "@/lib/data";
-import { Dunes } from "@/components/site";
 import { Ic, Stars } from "@/components/icons";
 import TripsBrowser from "@/components/trips-browser";
 import ContactForm from "@/components/contact-form";
@@ -22,22 +21,11 @@ export default async function Home({ searchParams }: { searchParams: { err?: str
   return (
     <>
       <section className="hero">
-        <div className="sun" />
-        <div className="wrap in">
-          <span className="chip" style={{ background: "rgba(255,255,255,.14)", color: "#ffd9c9", width: "fit-content" }}>{Ic.shield(14)} حجز فوري ودفع آمن</span>
+        <div className="in">
           <h1 className="display">{s.home.heroTitle}</h1>
           <p>{s.home.heroText}</p>
-          <div className="cta">
-            <a href="#trips" className="btn primary lg">تصفّح الرحلات</a>
-            <a href="#my-booking" className="btn lg" style={{ background: "rgba(255,255,255,.12)", color: "#fff" }}>{Ic.ticket(18)} استعراض حجزي</a>
-          </div>
-          <div className="stats">
-            <div><b>{counts[1]}</b><span>رحلة متاحة</span></div>
-            {counts[0] > 20 && <div><b>+{counts[0]}</b><span>حجز ناجح</span></div>}
-            <div><b>{methods.includes("applepay") ? "Apple Pay" : "مدى"}</b><span>وطرق دفع أخرى</span></div>
-          </div>
+          <div className="cta"><a href="#trips" className="btn primary">تصفّح الرحلات</a><a href="#my-booking" className="btn ghost">{Ic.ticket(16)} استعراض حجزي</a></div>
         </div>
-        <Dunes />
       </section>
 
       <TripsBrowser trips={JSON.parse(JSON.stringify(trips))} seats={seats} cats={JSON.parse(JSON.stringify(usedCats))} />
