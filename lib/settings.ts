@@ -1,7 +1,7 @@
 import { prisma } from "./db";
 
 export const DEF = {
-  brand: "رحلات",
+  brand: process.env.SEED_BRAND || "رحلات",
   tagline: "رحلات ترفيهية منظّمة بعناية",
   logoUrl: "",
   about: "نُنظّم رحلات ترفيهية وسياحية داخل المملكة بإشراف فريق متخصص: برامج مدروسة، مواصلات مريحة، وتجربة لا تُنسى.",
@@ -28,7 +28,7 @@ export const DEF = {
     pk: "", sk: "", webhookSecret: "",
     /// طرق الدفع المفعّلة: creditcard | applepay | stcpay | samsungpay
     methods: ["creditcard", "applepay", "stcpay"] as string[],
-    applePayLabel: "Rihlat",
+    applePayLabel: process.env.SEED_APPLE_LABEL || "Rihlat",
     appleDomainFile: "",
     /// السماح بالحجز بدون دفع إلكتروني (تحويل بنكي / نقدًا عند الحضور)
     allowTransfer: false,
