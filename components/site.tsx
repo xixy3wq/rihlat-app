@@ -20,10 +20,10 @@ export function SiteHeader({ s }: { s: PublicSettings }) {
       <div className="wrap in">
         <Logo s={s} />
         <nav className="nav">
-          <Link href="/trips">الرحلات</Link>
-          <Link href="/about">من نحن</Link>
-          <Link href="/contact">تواصل</Link>
-          <Link href="/my-booking" className="keep">حجزي</Link>
+          <Link href="/#trips">الرحلات</Link>
+          <Link href="/#about">من نحن</Link>
+          <Link href="/#contact">تواصل</Link>
+          <Link href="/#my-booking" className="keep">حجزي</Link>
         </nav>
       </div>
     </header>
@@ -42,8 +42,8 @@ export function SiteFooter({ s }: { s: PublicSettings }) {
         </div>
         <div>
           <h4>روابط</h4>
-          <Link href="/trips">كل الرحلات</Link>
-          <Link href="/my-booking">استعراض حجزي</Link>
+          <Link href="/#trips">كل الرحلات</Link>
+          <Link href="/#my-booking">استعراض حجزي</Link>
           <Link href="/terms">الشروط والأحكام</Link>
           <Link href="/refund-policy">سياسة الإلغاء والاسترجاع</Link>
           <Link href="/privacy">سياسة الخصوصية</Link>

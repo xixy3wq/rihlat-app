@@ -25,7 +25,7 @@ export default async function TripPage({ params }: { params: { slug: string } })
   const faq: { q: string; a: string }[] = Array.isArray(t.faq) ? (t.faq as any) : [];
   const deps = t.departures.map((d) => ({ id: d.id, startAt: d.startAt.toISOString(), endAt: d.endAt?.toISOString() || null, capacity: d.capacity, left: Math.max(0, d.capacity - (seats[d.id] || 0)), priceAdult: d.priceAdult, priceChild: d.priceChild, status: d.status, note: d.note }));
   return (
-    <div className="wrap section stack-lg">
+    <div className="wrap section stack-lg trip-page">
       <div className="steps"><Link href="/">الرئيسية</Link><i>/</i><Link href="/trips">الرحلات</Link>{t.category && <><i>/</i><Link href={`/trips?cat=${t.category.slug}`}>{t.category.name}</Link></>}</div>
       <div className={`gallery${imgs.length <= 1 ? " one" : ""}`}>
         {(imgs.length ? imgs : [COVER_FALLBACK]).slice(0, 3).map((u, i) => <div className="g" key={i}><img src={u} alt={`${t.title} ${i + 1}`} /></div>)}
@@ -81,10 +81,11 @@ export default async function TripPage({ params }: { params: { slug: string } })
             </section>
           )}
         </div>
-        <aside className="sticky">
+        <aside className="sticky" id="book">
           <BookBox trip={{ id: t.id, slug: t.slug, title: t.title, priceAdult: t.priceAdult, priceChild: t.priceChild, childNote: t.childNote, maxPerBooking: t.maxPerBooking }} deps={deps} methods={s.payment.methods} vat={s.vat} />
         </aside>
       </div>
+      <div className="mob-cta"><div className="price"><span className="from">يبدأ من</span><b>{fmtMoney(Math.min(t.priceAdult, ...deps.map((d) => d.priceAdult ?? t.priceAdult)))}</b></div><a href="#book" className="btn primary">{Ic.ticket(16)} احجز الآن</a></div>
     </div>
   );
 }

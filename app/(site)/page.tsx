@@ -2,29 +2,34 @@ import Link from "next/link";
 import { prisma } from "@/lib/db";
 import { getSettings, publicSettings } from "@/lib/settings";
 import { publishedTrips } from "@/lib/data";
-import { TripCard, Dunes } from "@/components/site";
+import { Dunes } from "@/components/site";
 import { Ic, Stars } from "@/components/icons";
+import TripsBrowser from "@/components/trips-browser";
+import ContactForm from "@/components/contact-form";
+import { waLink } from "@/lib/wa";
 
-export default async function Home() {
+/** الصفحة الواحدة: كل الأقسام بالتمرير — الرحلات، كيف تحجز، الآراء، الأسئلة، من نحن، تواصل، حجزي */
+export default async function Home({ searchParams }: { searchParams: { err?: string } }) {
   const s = publicSettings(await getSettings());
   const [{ trips, seats }, cats, reviews, counts] = await Promise.all([
-    publishedTrips({ limit: 8 }),
+    publishedTrips({ limit: 100 }),
     prisma.category.findMany({ orderBy: { order: "asc" } }),
     prisma.review.findMany({ where: { approved: true }, orderBy: { createdAt: "desc" }, take: 6, include: { trip: { select: { title: true } } } }),
     Promise.all([prisma.booking.count({ where: { status: "paid" } }), prisma.trip.count({ where: { status: "published" } })]),
   ]);
   const methods = s.payment.methods;
+  const usedCats = cats.filter((c) => trips.some((t) => t.categoryId === c.id));
   return (
     <>
       <section className="hero">
         <div className="sun" />
         <div className="wrap in">
-          <span className="chip accent" style={{ background: "rgba(255,255,255,.14)", color: "#ffd9c9", width: "fit-content" }}>{Ic.shield(14)} حجز فوري ودفع آمن</span>
+          <span className="chip" style={{ background: "rgba(255,255,255,.14)", color: "#ffd9c9", width: "fit-content" }}>{Ic.shield(14)} حجز فوري ودفع آمن</span>
           <h1 className="display">{s.home.heroTitle}</h1>
           <p>{s.home.heroText}</p>
           <div className="cta">
-            <Link href="/trips" className="btn primary lg">تصفّح الرحلات</Link>
-            <Link href="/my-booking" className="btn lg" style={{ background: "rgba(255,255,255,.12)", color: "#fff" }}>{Ic.ticket(18)} استعراض حجزي</Link>
+            <a href="#trips" className="btn primary lg">تصفّح الرحلات</a>
+            <a href="#my-booking" className="btn lg" style={{ background: "rgba(255,255,255,.12)", color: "#fff" }}>{Ic.ticket(18)} استعراض حجزي</a>
           </div>
           <div className="stats">
             <div><b>{counts[1]}</b><span>رحلة متاحة</span></div>
@@ -35,26 +40,9 @@ export default async function Home() {
         <Dunes />
       </section>
 
-      <section className="wrap section" style={{ paddingTop: 22 }}>
-        <div className="cats">
-          <Link href="/trips" className="cat on"><span className="ic">✨</span>الكل</Link>
-          {cats.map((c) => <Link key={c.id} href={`/trips?cat=${c.slug}`} className="cat"><span className="ic">{c.icon}</span>{c.name}</Link>)}
-        </div>
-      </section>
+      <TripsBrowser trips={JSON.parse(JSON.stringify(trips))} seats={seats} cats={JSON.parse(JSON.stringify(usedCats))} />
 
-      <section className="wrap section" style={{ paddingTop: 0 }}>
-        <div className="section-head">
-          <div><span className="eyebrow">الأقرب موعدًا</span><h2>الرحلات المتاحة</h2></div>
-          <Link href="/trips" className="more">عرض الكل ←</Link>
-        </div>
-        {trips.length ? (
-          <div className="trips">{trips.map((t) => <TripCard key={t.id} t={t} seats={seats} />)}</div>
-        ) : (
-          <div className="card empty"><span className="big">🏕️</span><b>لا توجد رحلات منشورة حاليًا</b><span>تابعونا، الرحلات الجديدة قريبًا.</span></div>
-        )}
-      </section>
-
-      <section className="wrap section">
+      <section className="wrap section" id="how">
         <div className="section-head"><div><span className="eyebrow">خطوات بسيطة</span><h2>كيف تحجز؟</h2></div></div>
         <div className="grid-4">
           {[
@@ -72,28 +60,61 @@ export default async function Home() {
       </section>
 
       {reviews.length > 0 && (
-        <section className="wrap section">
+        <section className="wrap section" id="reviews">
           <div className="section-head"><div><span className="eyebrow">آراء المشاركين</span><h2>قالوا عنّا</h2></div></div>
           <div className="grid-3">
             {reviews.map((r) => (
-              <div key={r.id} className="card review">
-                <Stars n={r.rating} />
-                <p>{r.text}</p>
-                <div className="who"><b>{r.name}</b><span className="muted">{r.trip.title}</span></div>
-              </div>
+              <div key={r.id} className="card review"><Stars n={r.rating} /><p>{r.text}</p><div className="who"><b>{r.name}</b><span className="muted">{r.trip.title}</span></div></div>
             ))}
           </div>
         </section>
       )}
 
       {s.home.faq.length > 0 && (
-        <section className="wrap section" style={{ maxWidth: 820 }}>
+        <section className="wrap section" id="faq" style={{ maxWidth: 820 }}>
           <div className="section-head"><div><span className="eyebrow">الأسئلة الشائعة</span><h2>تسأل كثيرًا؟</h2></div></div>
-          <div className="faq stack" style={{ gap: 8 }}>
-            {s.home.faq.map((f, i) => <details key={i}><summary>{f.q}</summary><p>{f.a}</p></details>)}
-          </div>
+          <div className="faq stack" style={{ gap: 8 }}>{s.home.faq.map((f, i) => <details key={i}><summary>{f.q}</summary><p>{f.a}</p></details>)}</div>
         </section>
       )}
+
+      <section className="wrap section" id="about">
+        <div className="section-head"><div><span className="eyebrow">من نحن</span><h2>{s.brand}</h2></div></div>
+        <div className="about-grid">
+          <div className="card prose">{s.about.split(/\n+/).map((p, i) => <p key={i}>{p}</p>)}{(s.cr || s.license) && <p className="tiny muted">{s.cr && `سجل تجاري: ${s.cr}`}{s.cr && s.license && " · "}{s.license && `ترخيص: ${s.license}`}</p>}</div>
+          <div className="card stack" style={{ gap: 10 }}>
+            <h3>لماذا تحجز معنا؟</h3>
+            <ul className="checks"><li>برامج مدروسة ومشرفون مرافقون</li><li>دفع إلكتروني آمن وتذكرة فورية</li><li>تذكير قبل الرحلة ونقطة تجمع واضحة</li><li>سياسة إلغاء واضحة</li></ul>
+          </div>
+        </div>
+      </section>
+
+      <section className="wrap section" id="contact">
+        <div className="section-head"><div><span className="eyebrow">نسعد بخدمتك</span><h2>تواصل معنا</h2></div></div>
+        <div className="about-grid">
+          <ContactForm />
+          <div className="card stack">
+            {s.whatsapp && <a className="btn wa" href={waLink(s.whatsapp)} target="_blank" rel="noopener">{Ic.wa(18)} واتساب {s.whatsapp}</a>}
+            {s.phone && <a className="btn ghost" href={`tel:${s.phone}`}>{Ic.phone(18)} {s.phone}</a>}
+            {s.email && <a className="btn ghost" href={`mailto:${s.email}`}>{s.email}</a>}
+            {s.address && <p className="small muted">{Ic.pin(14)} {s.address}</p>}
+            {s.social.maps && <a className="btn ghost" href={s.social.maps} target="_blank" rel="noopener">{Ic.map(18)} موقعنا على الخريطة</a>}
+            {!s.whatsapp && !s.phone && !s.email && <p className="small muted">سيتم إضافة بيانات التواصل قريبًا.</p>}
+          </div>
+        </div>
+      </section>
+
+      <section className="wrap section" id="my-booking" style={{ maxWidth: 560 }}>
+        <form className="card stack" action="/api/lookup" method="get">
+          <h2>{Ic.ticket(22)} استعراض حجزي</h2>
+          <p className="muted small">اكتب رقم الحجز (مثل {s.bookingPrefix}-7K3M2P) ورقم الجوال المستخدم في الحجز.</p>
+          {searchParams.err && <div className="notice bad">لم نجد حجزًا بهذه البيانات.</div>}
+          <div className="grid-2">
+            <div className="field"><label>رقم الحجز</label><input className="input" name="code" dir="ltr" required placeholder={`${s.bookingPrefix}-XXXXXX`} /></div>
+            <div className="field"><label>رقم الجوال</label><input className="input" name="phone" dir="ltr" inputMode="tel" required placeholder="05xxxxxxxx" /></div>
+          </div>
+          <button className="btn primary lg">عرض الحجز</button>
+        </form>
+      </section>
     </>
   );
 }
