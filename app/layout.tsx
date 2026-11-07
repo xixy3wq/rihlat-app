@@ -9,7 +9,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: { default: s?.seo.title || `${brand} — ${s?.tagline || "رحلات ترفيهية منظّمة"}`, template: `%s — ${brand}` },
     description: s?.seo.description || s?.about || "رحلات ترفيهية وسياحية منظّمة داخل المملكة",
     manifest: "/manifest.webmanifest",
-    icons: { icon: "/icon.svg" },
+    icons: { icon: "/icon-192.png", apple: "/apple-180.png" },
     openGraph: { siteName: brand, locale: "ar_SA", type: "website" },
   };
 }

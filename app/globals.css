@@ -1,15 +1,15 @@
 /* «رحلات»: هوية دافئة — رمل، ليل كحلي، غروب مرجاني، وبحر فيروزي. خط IBM Plex Sans Arabic للنصوص وBaloo Bhaijaan 2 للعناوين الكبيرة. */
 :root{
-  --bg:#ffffff; --surface:#ffffff; --sunk:#f6f3f5; --ink:#2b2430; --muted:#7a7080; --line:#ebe5e9; --line-2:#d9d0d6;
-  --accent:#7a4f6d; --accent-ink:#ffffff; --accent-soft:#f3ebf0; --accent-deep:#5e3a53;
-  --navy:#7a4f6d; --navy-2:#5e3a53; --navy-ink:#ffffff;
-  --sea:#7a4f6d; --sea-ink:#5e3a53; --sea-soft:#f3ebf0;
-  --gold:#c69320; --gold-soft:#fbf1d6;
-  --ok:#1f8a5b; --ok-soft:#dcf3e7; --warn:#a2640a; --warn-soft:#fdf0d8; --bad:#c0392b; --bad-soft:#fbe3e0; --info:#2c5cc5; --info-soft:#e4ecfb;
-  --hero:linear-gradient(135deg,#f7f1f5 0%,#efe3eb 100%);
+  --bg:#ffffff; --surface:#ffffff; --sunk:#f4f6fa; --ink:#1e2a44; --muted:#6b7590; --line:#e6eaf2; --line-2:#cfd6e4;
+  --accent:#e8743f; --accent-ink:#ffffff; --accent-soft:#fdeee6; --accent-deep:#c95a2b;
+  --navy:#2f56b8; --navy-2:#24449a; --navy-ink:#ffffff;
+  --sea:#3f95c5; --sea-ink:#2f56b8; --sea-soft:#e7f1f9;
+  --gold:#e3b53a; --gold-soft:#fdf5dc;
+  --ok:#1f8a5b; --ok-soft:#dcf3e7; --warn:#a2640a; --warn-soft:#fdf0d8; --bad:#c0392b; --bad-soft:#fbe3e0; --info:#2f56b8; --info-soft:#e7f1f9;
+  --hero:linear-gradient(135deg,#eef4fc 0%,#fdf3e8 100%);
   --sun:none;
-  --sh-1:0 1px 2px rgba(43,36,48,.04),0 6px 18px -10px rgba(43,36,48,.10);
-  --sh-2:0 2px 6px rgba(43,36,48,.06),0 18px 40px -14px rgba(43,36,48,.18);
+  --sh-1:0 1px 2px rgba(30,42,68,.04),0 6px 18px -10px rgba(30,42,68,.10);
+  --sh-2:0 2px 6px rgba(30,42,68,.06),0 18px 40px -14px rgba(30,42,68,.18);
   --glass:rgba(255,255,255,.92);
   --f-body:"Tajawal","IBM Plex Sans Arabic","Segoe UI",Tahoma,Arial,sans-serif;
   --f-display:"Tajawal","IBM Plex Sans Arabic",sans-serif;
@@ -80,7 +80,7 @@ textarea.input{min-height:96px;resize:vertical;line-height:1.6}
 .site-top{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid var(--line)}
 .site-top .in{display:flex;align-items:center;gap:16px;min-height:66px}
 .logo{display:flex;align-items:center;gap:10px;color:var(--ink);text-decoration:none!important;font-family:var(--f-display);font-weight:800;font-size:1.45rem;line-height:1}
-.logo img{height:40px;width:auto}
+.logo img{height:44px;width:auto}
 .logo-mark{width:36px;height:36px;border-radius:10px;background:var(--accent-soft);display:grid;place-items:center;color:var(--accent)}
 .nav{display:flex;gap:4px;margin-inline-start:auto}
 .nav a{padding:8px 13px;border-radius:999px;color:var(--ink);font-weight:600;font-size:.93rem;text-decoration:none!important}
@@ -112,7 +112,7 @@ html{scroll-behavior:smooth}
 .cats{display:flex;gap:10px;overflow-x:auto;padding:4px 2px 10px;scrollbar-width:none}
 .cats::-webkit-scrollbar{display:none}
 .cat{flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;background:var(--surface);font-weight:600;font-size:.9rem;color:var(--ink);text-decoration:none!important;border:1px solid var(--line-2);cursor:pointer;font-family:inherit}
-.cat.on{border-color:var(--accent);background:var(--accent);color:#fff}
+.cat.on{border-color:var(--navy);background:var(--navy);color:#fff}
 .cat .ic{font-size:1.1rem}
 
 /* بطاقة الرحلة */
@@ -131,7 +131,7 @@ html{scroll-behavior:smooth}
 .trip .foot{display:flex;align-items:end;justify-content:space-between;margin-top:auto;padding-top:6px}
 .price{display:grid;line-height:1.2}
 .price .from{font-size:.75rem;color:var(--muted)}
-.price b{font-size:1.2rem;font-family:var(--f-display);color:var(--accent-deep)}
+.price b{font-size:1.2rem;font-family:var(--f-display);color:var(--navy)}
 .price small{font-size:.75rem;font-weight:400;color:var(--muted)}
 .dates-mini{display:flex;gap:6px;flex-wrap:wrap}
 .dates-mini span{font-size:.78rem;padding:3px 9px;border-radius:8px;background:var(--sea-soft);color:var(--sea-ink);font-weight:600}
@@ -165,7 +165,7 @@ html{scroll-behavior:smooth}
 .dep.off{opacity:.55;cursor:not-allowed}
 .dep .d{display:grid;line-height:1.3;flex:1}
 .dep .d b{font-size:.98rem} .dep .d span{font-size:.8rem;color:var(--muted)}
-.dep .cal{width:46px;height:50px;border-radius:10px;background:var(--accent);color:#fff;display:grid;place-items:center;line-height:1;text-align:center;flex:0 0 auto}
+.dep .cal{width:46px;height:50px;border-radius:10px;background:var(--navy);color:#fff;display:grid;place-items:center;line-height:1;text-align:center;flex:0 0 auto}
 .dep .cal b{font-size:1.2rem;font-family:var(--f-display)} .dep .cal small{font-size:.65rem;opacity:.8}
 .counter{display:flex;align-items:center;gap:0;border:1.5px solid var(--line-2);border-radius:999px;overflow:hidden}
 .counter button{width:38px;height:38px;border:0;background:var(--sunk);color:var(--ink);font-size:1.2rem;cursor:pointer}
@@ -191,7 +191,7 @@ html{scroll-behavior:smooth}
 .steps{display:flex;gap:6px;align-items:center;font-size:.82rem;color:var(--muted);flex-wrap:wrap}
 .steps b{color:var(--ink)} .steps i{font-style:normal;opacity:.5}
 .ticket{border-radius:var(--r);background:var(--surface);box-shadow:var(--sh-2);overflow:hidden}
-.ticket .head{background:var(--accent);color:#fff;padding:22px 22px 18px;display:grid;gap:4px}
+.ticket .head{background:var(--navy);color:#fff;padding:22px 22px 18px;display:grid;gap:4px}
 .ticket .head .code{font-family:var(--f-display);font-size:1.7rem;letter-spacing:.06em}
 .ticket .body{padding:20px 22px;display:grid;gap:16px}
 .ticket .qr{display:grid;place-items:center;gap:6px;padding:12px;background:#fff;border-radius:var(--r-sm);border:1px dashed var(--line-2)}
@@ -214,7 +214,7 @@ html{scroll-behavior:smooth}
 
 /* لوحة الإدارة */
 .adm{display:grid;grid-template-columns:240px 1fr;min-height:100vh}
-.adm-side{background:#2b2430;color:#fff;padding:18px 14px;display:flex;flex-direction:column;gap:6px;position:sticky;top:0;height:100vh;overflow:auto}
+.adm-side{background:#1e2a44;color:#fff;padding:18px 14px;display:flex;flex-direction:column;gap:6px;position:sticky;top:0;height:100vh;overflow:auto}
 .adm-side .brand{font-family:var(--f-display);font-size:1.3rem;padding:6px 10px 14px;color:#fff;display:flex;align-items:center;gap:8px}
 .adm-side a{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;color:rgba(255,255,255,.78);font-weight:600;font-size:.93rem;text-decoration:none!important}
 .adm-side a:hover{background:rgba(255,255,255,.08);color:#fff}
@@ -273,7 +273,7 @@ table.tbl{width:100%;border-collapse:collapse;font-size:.9rem}
 @media (max-width:900px){.trip-page{padding-bottom:96px}}
 
 /* ===== شكل المتجر: شريط إعلان، أيقونات الرأس، شبكة عمودين، شريط سفلي ===== */
-.announce{background:var(--accent);color:#fff;font-size:.82rem;font-weight:600;text-align:center;padding:8px 40px;position:relative;display:flex;align-items:center;justify-content:center;gap:8px;line-height:1.5}
+.announce{background:var(--navy);color:#fff;font-size:.82rem;font-weight:600;text-align:center;padding:8px 40px;position:relative;display:flex;align-items:center;justify-content:center;gap:8px;line-height:1.5}
 .announce .bell{position:absolute;inset-inline-start:12px;top:50%;transform:translateY(-50%);opacity:.8;display:grid}
 .announce .x{position:absolute;inset-inline-end:8px;top:50%;transform:translateY(-50%);background:none;border:0;color:#fff;opacity:.8;cursor:pointer;display:grid;padding:6px}
 .icons{display:flex;align-items:center;gap:6px;margin-inline-start:auto}
@@ -289,7 +289,7 @@ table.tbl{width:100%;border-collapse:collapse;font-size:.9rem}
   .site{padding-bottom:calc(64px + env(safe-area-inset-bottom,0px))}
   .bottom-nav{display:grid;grid-template-columns:repeat(3,1fr);position:fixed;bottom:0;left:0;right:0;z-index:26;background:var(--surface);border-top:1px solid var(--line);padding:6px 0 calc(6px + env(safe-area-inset-bottom,0px))}
   .bottom-nav a{display:grid;justify-items:center;gap:2px;font-size:.72rem;font-weight:700;color:var(--muted);text-decoration:none!important}
-  .bottom-nav a.on{color:var(--accent-deep)}
+  .bottom-nav a.on{color:var(--navy)}
   .wa-float{bottom:calc(76px + env(safe-area-inset-bottom,0px))}
   .mob-cta{bottom:calc(58px + env(safe-area-inset-bottom,0px))}
   .trip-page{padding-bottom:150px}

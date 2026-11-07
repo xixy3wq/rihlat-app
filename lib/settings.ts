@@ -3,7 +3,7 @@ import { prisma } from "./db";
 export const DEF = {
   brand: process.env.SEED_BRAND || "رحلات",
   tagline: "رحلات ترفيهية منظّمة بعناية",
-  logoUrl: "",
+  logoUrl: "/logo.png",
   about: "نُنظّم رحلات ترفيهية وسياحية داخل المملكة بإشراف فريق متخصص: برامج مدروسة، مواصلات مريحة، وتجربة لا تُنسى.",
   phone: "",
   whatsapp: "",
