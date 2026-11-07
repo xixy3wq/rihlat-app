@@ -4,6 +4,7 @@ const prisma = new PrismaClient();
 const SAR = (n) => Math.round(n * 100);
 const day = (d, h = 6) => { const x = new Date(); x.setUTCDate(x.getUTCDate() + d); x.setUTCHours(h - 3, 0, 0, 0); return x; };
 try {
+  if (process.env.SEED_DEMO !== "1") { console.log("SEED skip: SEED_DEMO not set"); process.exit(0); }
   if (await prisma.trip.count()) { console.log("SEED skip: trips exist"); process.exit(0); }
   const cats = Object.fromEntries((await prisma.category.findMany()).map((c) => [c.slug, c.id]));
   const trips = [
